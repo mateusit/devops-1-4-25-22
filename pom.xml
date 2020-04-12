@@ -4,7 +4,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>devops</artifactId>
 
-	<version>1.7.3-SNAPSHOT</version>
+	<version>1.7.3</version>
 
 	<packaging>war</packaging>
 	<name>devops</name>
@@ -42,7 +42,7 @@
 	<scm>
 		<url>https://github.com/amateus1/devopsbase</url>
 		<connection>scm:git:https://github.com/amateus1/devopsbase.git</connection>
-		<tag>v1.6.1</tag>
+		<tag>Yes</tag>
 	</scm>
 
 	<dependencies>
