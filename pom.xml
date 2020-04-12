@@ -4,7 +4,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>devops</artifactId>
 
-	<version>6.2.3</version>
+	<version>6.2.4-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>devops</name>
 	<description>DevOps Demo Project</description>
