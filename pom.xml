@@ -4,15 +4,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>devops</artifactId>
 
-<<<<<<< .merge_file_a22244
-	<version>1.0.1-SNAPSHOT</version>
-=======
-<<<<<<< HEAD
-	<version>1.1.1-SNAPSHOT</version>
-=======
 	<version>6.1.1-SNAPSHOT</version>
->>>>>>> 4c343a3e2c85ee59ce8f56946d42c262373c74ca
->>>>>>> .merge_file_a19392
 
 	<packaging>war</packaging>
 	<name>devops</name>
