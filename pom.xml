@@ -50,11 +50,7 @@
 	<scm>
 		<url>https://github.com/amateus1/devopsbase</url>
 		<connection>scm:git:https://github.com/amateus1/devopsbase.git</connection>
-<<<<<<< .merge_file_a22244
 		<tag>v1.0.1</tag>
-=======
-		<tag>1.0.1</tag>
->>>>>>> .merge_file_a19392
 	</scm>
 
 	<dependencies>
