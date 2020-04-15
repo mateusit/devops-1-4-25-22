@@ -1,9 +1,10 @@
 node {
    
-   def mvnHome
+   def mvnHome = tool 'MAVEN'
+   evn.JAVA_HOME = tool'JAVA'
 
    stage('Prepare') {
-         mvnHome = tool 'MAVEN'
+
       //      credentialsID: 'GITHUB-DEPLOY'
 //      git fetch --tags --progress https://github.com/amateus1/devopsbase.git
 //      git url: 'https://git@github.com:amateus1/devopsbase.git', branch: 'develop'
