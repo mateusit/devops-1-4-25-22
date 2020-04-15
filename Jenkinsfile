@@ -1,15 +1,7 @@
 node {
-   def mvn(String goals) {
-    def mvnHome = tool "Maven-3.3.9"
-    def javaHome = tool "1.8.0_242"
-
-    withEnv(["JAVA_HOME=${javaHome}", "PATH+MAVEN=${mvnHome}/bin"]) {
-        sh "mvn -B ${goals}"
-    }
-}
    
    def mvnHome
-   mvnHome = tool 'MAVEN'
+   mvnHome = tool 'Maven-3.3.9'
    stage('Prepare') {
 //      credentialsID: 'GITHUB-DEPLOY'
 //      git fetch --tags --progress https://github.com/amateus1/devopsbase.git
