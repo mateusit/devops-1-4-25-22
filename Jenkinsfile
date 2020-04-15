@@ -9,7 +9,7 @@ node {
    }
    stage('Build') {
       if (isUnix()) {
-         sh "'./usr/share/maven/bin/mvn' -Dmaven.test.failure.ignore clean package"
+         sh "'/usr/bin/mvn' -Dmaven.test.failure.ignore clean package"
       } else {
          bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
       }
