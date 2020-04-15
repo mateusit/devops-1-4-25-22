@@ -1,16 +1,17 @@
 node {
    def mvnHome
+   mvnHome = tool 'MAVEN'
    stage('Prepare') {
 //      credentialsID: 'GITHUB-DEPLOY'
 //      git fetch --tags --progress https://github.com/amateus1/devopsbase.git
 //      git url: 'https://git@github.com:amateus1/devopsbase.git', branch: 'develop'
          git (url: 'https://github.com/amateus1/devopsbase.git', credentialsID: 'aee06964-d162-4114-b8fb-9d622b7e8389', branch: 'develop')
-      mvnHome = tool 'MAVEN'
+
    }
    stage('Build') {
       if (isUnix()) {
 //         sh "'/usr/bin/mvn' -Dmaven.test.failure.ignore clean package"
-        sh "/var/lib/jenkins/workspace/develop-pipeline/mvn -Dmaven.test.failure.ignore clean package"
+        sh "mvn -Dmaven.test.failure.ignore clean package"
   
     } else {
          bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
