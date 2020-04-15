@@ -1,8 +1,8 @@
 node {
    def mvnHome
    stage('Prepare') {
-      credentialsID: 'aee06964-d162-4114-b8fb-9d622b7e8389'
-      git url: 'ssh://git@github.com:amateus1/devopsbase.git', branch: 'develop'
+      credentialsID: 'GITHUB-DEPLOY'
+      git url: 'https://git@github.com:amateus1/devopsbase.git', branch: 'develop'
       mvnHome = tool 'maven'
    }
    stage('Build') {
