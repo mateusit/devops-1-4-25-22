@@ -1,7 +1,7 @@
 node {
    
    def mvnHome
-   mvnHome = tool 'Maven-3.3.9'
+   mvnHome = tool 'MAVEN'
    stage('Prepare') {
 //      credentialsID: 'GITHUB-DEPLOY'
 //      git fetch --tags --progress https://github.com/amateus1/devopsbase.git
