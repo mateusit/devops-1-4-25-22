@@ -1,7 +1,7 @@
 node {
    
    def mvnHome = tool 'MAVEN'
-   evn.JAVA_HOME = tool'JAVA'
+   env.JAVA_HOME = tool'JAVA'
 
    stage('Prepare') {
 
