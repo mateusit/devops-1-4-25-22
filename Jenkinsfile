@@ -11,8 +11,7 @@ node {
    stage('Build') {
       if (isUnix()) {
 //         sh "'/usr/bin/mvn' -Dmaven.test.failure.ignore clean package"
-         sh "sudo -s"
-         sh "mvn -version"
+         sh "/var/lib/jenkins/workspace/develop-pipeline/mvn -version"
 //         sh "mvn -Dmaven.test.failure.ignore clean package"
   
     } else {
