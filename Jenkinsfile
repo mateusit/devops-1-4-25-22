@@ -12,7 +12,7 @@ node {
       if (isUnix()) {
 //         sh "'/usr/bin/mvn' -Dmaven.test.failure.ignore clean package"
         sh "mvn -version"
-         sh "mvn -Dmaven.test.failure.ignore clean package"
+//         sh "mvn -Dmaven.test.failure.ignore clean package"
   
     } else {
          bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
