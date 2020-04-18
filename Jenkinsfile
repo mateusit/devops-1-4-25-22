@@ -25,7 +25,8 @@ node {
    }
    stage('Unit Test') {
       junit '**/target/surefire-reports/TEST-*.xml'
-      archive 'target/*.jar'
+       archive 'target/*.war'
+//      archive 'target/*.jar'
 //      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: '/target', artifactGroup: 'com.example.devops', artifactName: '*.jar', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
         hygieiaCodeQualityPublishStep checkstyleFilePattern: '**/*/checkstyle-result.xml', findbugsFilePattern: '**/*/Findbugs.xml', jacocoFilePattern: '**/*/jacoco.xml', junitFilePattern: '**/*/TEST-.*-test.xml', pmdFilePattern: '**/*/PMD.xml'
    }
@@ -46,7 +47,7 @@ node {
    }
    stage('Deploy') {
        sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat.eastus.cloudapp.azure.com:8080/manager/text/deploy?path=/develop-pipeline&update=true"'
-      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: 'develop-pipeline/target/', artifactGroup: 'com.example.devops', artifactName: 'devops-1.5.0-SNAPSHOT', artifactVersion: '1.5.0-SNAPSHOT', buildStatus: 'InProgress', environmentName: 'DEV'   
+      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: 'devops-1.5.0-SNAPSHOT', artifactVersion: '1.5.0-SNAPSHOT', buildStatus: 'InProgress', environmentName: 'DEV'   
      hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '1.5.0-SNAPSHOT', artifactVersion: ''
    
    }
