@@ -39,7 +39,7 @@ node {
    stage('Sonar') {
       if (isUnix()) {
          sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=develop-pipeline   -Dsonar.host.url=http://mep-sonar.eastus.cloudapp.azure.com   -Dsonar.login=ef026f77b563ee37ea01bb630b4dc2701ce4a306"
-         hygieiaSonarPublishStep ceQueryIntervalInSeconds: '10', ceQueryMaxAttempts: '30'
+         // hygieiaSonarPublishStep ceQueryIntervalInSeconds: '10', ceQueryMaxAttempts: '30'
       } else {
          bat(/"${mvnHome}\bin\mvn" sonar:sonar/)
       }
