@@ -47,8 +47,8 @@ node {
    }
    stage('Deploy') {
        sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat.eastus.cloudapp.azure.com:8080/manager/text/deploy?path=/develop-pipeline&update=true"'
-      hygieiaDeployPublishStep applicationName: '/develop-pipeline', artifactDirectory: 'develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '1.5.0-SNAPSHOT', artifactVersion: '1.5.0', buildStatus: 'Success', environmentName: 'DEV'   
-     hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '1.5.0-SNAPSHOT', artifactVersion: '1.5.0'
+      hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '1.5.0', buildStatus: 'Success', environmentName: 'DEV'   
+     hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '1.5.0'
    
    }
    stage("Smoke Test"){
