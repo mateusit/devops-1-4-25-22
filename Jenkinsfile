@@ -28,7 +28,7 @@ node {
        archive 'target/*.war'
 //      archive 'target/*.jar'
 //      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: '/target', artifactGroup: 'com.example.devops', artifactName: '*.jar', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
-      hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
+      hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
       hygieiaCodeQualityPublishStep checkstyleFilePattern: '**/*/checkstyle-result.xml', findbugsFilePattern: '**/*/Findbugs.xml', jacocoFilePattern: '**/*/jacoco.xml', junitFilePattern: '**/*/TEST-.*-test.xml', pmdFilePattern: '**/*/PMD.xml'
    }
    stage('Integration Test') {
