@@ -40,7 +40,8 @@ node {
    }
    stage('Sonar') {
       if (isUnix()) {
-         sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=develop-pipeline   -Dsonar.host.url=http://mep-sonar.eastus.cloudapp.azure.com   -Dsonar.login=ef026f77b563ee37ea01bb630b4dc2701ce4a306"
+ //        sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=develop-pipeline   -Dsonar.host.url=http://mep-sonar.eastus.cloudapp.azure.com   -Dsonar.login=ef026f77b563ee37ea01bb630b4dc2701ce4a306"
+ 		   sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=develop-pipeline   -Dsonar.host.url= http://54.227.225.164:9000 -Dsonar.login= f68d0b7ae24f4963c23d2b65bd7ae17fc0f800e1"
          // hygieiaSonarPublishStep ceQueryIntervalInSeconds: '10', ceQueryMaxAttempts: '30'
       } else {
          bat(/"${mvnHome}\bin\mvn" sonar:sonar/)
