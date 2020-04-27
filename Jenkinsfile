@@ -51,15 +51,15 @@ node {
    }
    stage('Deploy-DEV') {
        sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat.eastus.cloudapp.azure.com:8080/manager/text/deploy?path=/develop-pipeline&update=true"'
-     	hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '2.0.0'
+     	hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
  	}
    stage('Deploy-QA') {
  	   sh 'curl -u jenkins:jenkins -T target/**.war "http://coe-tomcatqa3.eastus.cloudapp.azure.com/manager/text/deploy?path=/develop-pipeline&update=true"'
-     hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '2.0.0'
+     hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
  	}
  	stage('Deploy-PROD') {
  	   sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat-prod.eastus.cloudapp.azure.com/manager/text/deploy?path=/develop-pipeline&update=true"'
-     	hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '2.0.0'
+     	hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
     }
    stage("Smoke Test-PROD"){
        sh "curl --retry-delay 10 --retry 5 http://mep-tomcat.eastus.cloudapp.azure.com:8080/develop-pipeline"
