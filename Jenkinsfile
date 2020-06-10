@@ -1,71 +1,278 @@
+#!groovy
+import groovy.json.JsonSlurperClassic
 node {
-   
-   def mvnHome = tool 'MAVEN'
-   env.JAVA_HOME = tool'JAVA'
+    def configuration
+    def buildStatus = BuildStatus.Ok
 
-   stage('Prepare') {
+    timestamps {
+        stage('Checkout') {
+            cleanDir(env.WORKSPACE)
+            checkoutComponents(env.COMPONENTS)
+            configuration = getConfiguration('BuildConfiguration.json')
+        }
+        
+        try {
+            stage('Build') {
+                for(def component : configuration.components ) {
+                    def solution = "${component.name}\\${component.solution}"
+                    bat "\"${tool 'nuget'}\" restore $solution"
+                }
+            }
+            
+            stage('Restore nUget') {
+                for(def component : configuration.components ) {
+                    def solution = "${component.name}\\${component.solution}"
+                    bat "\"${tool 'msbuild'}\" $solution ${component.properties} /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
+                }
+            }
+            
+            if(configuration.build.tests) {
+                stage('Unit Tests') {
+                    dir(env.WORKSPACE){
+                        bat """${tool 'nunit'} ${getFilePaths(configuration.tests.wildcards).join(' ')} --work=${configuration.reports}"""
+                        nunit testResultsPattern: "${configuration.reports}/TestResult.xml"
+                    }
+                }
+            }
+            
+                stage('Integration Tests') {
+                    echo 'Integration Tests'
+                }
+            
+            if(configuration.build.codeQuality) {
+                stage('Static Analysis') {
+                  def assemblies = getFilePaths(configuration.codeQuality.fxcop.wildcards)
+                  dir(env.WORKSPACE){
+                      for(def assembly : assemblies ) { 
+                         try{
+                          bat """"${tool 'fxcop'}" /f:$assembly /o:${configuration.reports}\\${new File(assembly).name}.fxcop.xml"""
+                         } catch(Exception ex) {
+                            echo ex.getMessage()
+                         }
+                      }
+                  }
+                }
+            }
+            
+            stage('Approval') {
+                    echo 'Approval'
+            }
+            
+            if(configuration.build.archive) {
+                stage('Artifact Upload') {
+                  dir(env.WORKSPACE){
+                     for(def archive : configuration.archive ) { 
+                       archiveArtifacts artifacts: archive, onlyIfSuccessful: true
+                     }
+                  }
+                }
+            }
+            
+            stage('Deploy') {
+                echo 'Deploy'
+            }
+            
+        } catch (ex) {
+            buildStatus = BuildStatus.Error;
+            echo ex
+            exit 1
+        } finally {
+            if(configuration.build.notifications) {
+                stage('Notifications') {
+                  def subject = "Build $buildStatus - $JOB_NAME ($BUILD_DISPLAY_NAME)"
 
-      //      credentialsID: 'GITHUB-DEPLOY'
-//      git fetch --tags --progress https://github.com/amateus1/devopsbase.git
-//      git url: 'https://git@github.com:amateus1/devopsbase.git', branch: 'develop'
-         git (url: 'https://github.com/amateus1/devopsbase.git', credentialsID: 'aee06964-d162-4114-b8fb-9d622b7e8389', branch: 'develop')
+                  def nunitTestBody = configuration.build.tests
+                    ? renderTemplete(
+                        configuration.reportsTemplates + 'nunitTestResult.template.html',
+                        getTestReportModel(configuration.reports + '\\TestResult.xml'))
+                    : ""
 
-   }
-   stage('Build') {
-      if (isUnix()) {
-//         sh "'/usr/bin/mvn' -Dmaven.test.failure.ignore clean package"
-           sh "mvn -Dmaven.test.failure.ignore clean package"
-//         sh "/var/lib/jenkins/workspace/develop-pipeline/mvn -version"
-//         sh "mvn -Dmaven.test.failure.ignore clean package"
-           hygieiaBuildPublishStep buildStatus: 'Success'
-  
-    } else {
-         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
-      }
-   }
-   stage('Unit Test') {
-      junit '**/target/surefire-reports/TEST-*.xml'
-       archive 'target/*.war'
-//      archive 'target/*.jar'
-//      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: '/target', artifactGroup: 'com.example.devops', artifactName: '*.jar', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
-        hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
-        hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'QA'
-        hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'PROD'    
-      	hygieiaCodeQualityPublishStep checkstyleFilePattern: '**/*/checkstyle-result.xml', findbugsFilePattern: '**/*/Findbugs.xml', jacocoFilePattern: '**/*/jacoco.xml', junitFilePattern: '**/*/TEST-.*-test.xml', pmdFilePattern: '**/*/PMD.xml'
-   }
-   stage('Integration Test') {
-     if (isUnix()) {
-        sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean verify"
-     } else {
-        bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify/)
-     }
-   }
-   stage('Sonar') {
-      if (isUnix()) {
-           sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=develop-pipeline   -Dsonar.host.url=http://mep-sonar.eastus.cloudapp.azure.com   -Dsonar.login=ef026f77b563ee37ea01bb630b4dc2701ce4a306"
- 		    // sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=develop-pipeline   -Dsonar.host.url= http://54.227.225.164:9000 -Dsonar.login= f68d0b7ae24f4963c23d2b65bd7ae17fc0f800e1" -X
-         // hygieiaSonarPublishStep ceQueryIntervalInSeconds: '10', ceQueryMaxAttempts: '30'
-      } else {
-         bat(/"${mvnHome}\bin\mvn" sonar:sonar/)
-      }
-   }
-   stage('Deploy-DEV') {
-       sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat.eastus.cloudapp.azure.com:8080/manager/text/deploy?path=/develop-pipeline&update=true"'
-     	hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
- 	}
-   stage('Deploy-QA') {
- 	   sh 'curl -u jenkins:jenkins -T target/**.war "http://coe-tomcatqa3.eastus.cloudapp.azure.com/manager/text/deploy?path=/develop-pipeline&update=true"'
-     hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
- 	}
- 	stage('Deploy-PROD') {
- 	   sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat-prod.eastus.cloudapp.azure.com/manager/text/deploy?path=/develop-pipeline&update=true"'
-     	hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
+                  def fxCopTestBody = configuration.build.codeQuality
+                    ? renderTemplete(
+                        configuration.reportsTemplates + 'fxCopTestResult.template.html',                 
+                        getFxCopReporModel(configuration.codeQuality.fxcop.reports))
+                    : ""
+
+                  def emailBody = renderTemplete(
+                    configuration.reportsTemplates + 'buildresult.template.html', 
+                    getBuildCompleteModel(nunitTestBody, fxCopTestBody, buildStatus))  
+
+                  emailext body: emailBody, subject: subject, to: 'khdevnet@gmail.com'
+                }
+            }
+       }
     }
-   stage("Smoke Test-PROD"){
-       sh "curl --retry-delay 10 --retry 5 http://mep-tomcat.eastus.cloudapp.azure.com:8080/develop-pipeline"
-       sh "curl --retry-delay 10 --retry 5 http://coe-tomcatqa3.eastus.cloudapp.azure.com/develop-pipeline/"
-       sh "curl --retry-delay 10 --retry 5 http://mep-tomcat-prod.eastus.cloudapp.azure.com/develop-pipeline/"
-       
-   }
 }
 
+def checkoutComponents(components){
+    for(def gitUrl : readJsonFromText(components) ) {
+        dir(getComponentFolder(gitUrl)) {
+            git url: gitUrl
+         }
+    }
+}
+
+def getConfiguration(configurationFileName) {
+    def buildConfigurationJsonFile = findFiles(glob: "**/**/$configurationFileName").first()
+    readJsonFromFile(buildConfigurationJsonFile.path)
+}
+
+def getComponentFolder(giturl) {
+    giturl.replace('.git','').tokenize( '/' ).last()
+}
+
+def readJsonFromText(def text) { 
+    return new JsonSlurperClassic().parseText(text) 
+}
+
+def readJsonFromFile(def path) { 
+    def configurationFile = new File(env.WORKSPACE, path)
+    return new JsonSlurperClassic().parseText(configurationFile.text) 
+}
+
+// parse fx cop
+def getFxCopReporModel(fxCopReportFileWildCards){
+    def reportMap = [:]
+    for(def fxCopReportFilePath : getFilePaths(fxCopReportFileWildCards) ) {
+        def fxCopReportFile = new File(env.WORKSPACE, fxCopReportFilePath)
+        def dllName = fxCopReportFile.name.replace(".fxcop.xml", "");
+        def statistic = parseFxCopReportXmlFile(fxCopReportFile)
+        echo dllName
+        echo statistic
+        reportMap.put(dllName, statistic)
+    }
+
+    def statisticHtml = '';
+    for(def model : reportMap ) {
+         statisticHtml+="<li>${model.key}: ${model.value}</li>"
+    }
+    
+    return ["statistic": statisticHtml]
+}
+
+def parseFxCopReportXmlFile(fxCopReportFile){
+   def errorsCount = 0
+   def warningsCount = 0
+   def fxCopRootNode = new XmlParser().parse(fxCopReportFile)
+   def namespacesNode = getFirstNodeByName(fxCopRootNode.children(), 'Namespaces')
+   def namespaceNodes = getAllNodesByName(namespacesNode.children(), 'Namespace');
+   
+   for(def node : namespaceNodes ) {
+       def messagesNode = getFirstNodeByName(node.children(), 'Messages')
+       def messageNodes = getAllNodesByName(messagesNode.children(), 'Message')
+       for(def messageNode : messageNodes ) {
+           def issueNode = getFirstNodeByName(messageNode.children(), 'Issue')
+           def issueNodeAttributes = issueNode.attributes()
+           def levelAttribute = issueNodeAttributes.get('Level')
+           if(levelAttribute != null) {
+           if(levelAttribute == 'Warning'){
+               warningsCount++
+           }
+           if(levelAttribute == 'Error'){
+               errorsCount++
+             }
+           }
+       }
+    }
+    
+    return "Warnings: ${warningsCount}, Errors: ${errorsCount}"
+}
+
+def getFirstNodeByName(nodes, nodeName){
+        for(def node : nodes ) {
+            if(node.name() == nodeName){
+                return node
+            }
+        }
+    }
+    
+def getAllNodesByName(nodes, nodeName){
+        def list = []
+        for(def node : nodes ) {
+            if(node.name() == nodeName){
+               list << node
+            }
+        }
+        return list
+    }
+
+def getBuildCompleteModel(nunitResultBody, fxCopResultBody, buildStatus){
+    return ["buildResultUrl": "$BUILD_URL", "buildStatus": buildStatus, 
+           "buildNumber": "$BUILD_DISPLAY_NAME", "applicationName": "$JOB_NAME",
+           "nunitResultBody" : "$nunitResultBody", "fxCopResultBody": "$fxCopResultBody"]
+}
+
+def mergeMap(target, map){
+    for(def result : map ) { target.put(map.key, map.value) }
+    return target
+}
+
+def renderTemplete(templateFilePath, model){
+    def templateBody =  new File(env.WORKSPACE, templateFilePath).text
+    def engine = new groovy.text.SimpleTemplateEngine()
+    engine.createTemplate(templateBody).make(model).toString()
+}
+
+def getTestReportModel(nunitTestReportXmlFilePath){
+    def testXmlRootNode = new XmlParser().parse(new File(env.WORKSPACE, nunitTestReportXmlFilePath))
+    def resultNode = findlastNode(testXmlRootNode.children(),'test-suite')
+    def result = resultNode.attributes();
+    result.put('testResultsUrl', env.JOB_URL + env.BUILD_ID + '/testReport')
+    return result
+}
+
+def findlastNode(list, nodeName){
+    for(def element : list.reverse() ) { 
+       if(element.name()==nodeName){
+           return element
+       }
+    }
+}
+
+def getFilePaths(wildcards){
+    def files = []
+    for(def wildcard : wildcards ) { 
+        files.addAll(findFiles(glob: wildcard))
+    }
+    
+    def filePaths = []
+    for(def file : files ) { filePaths << file.path }
+    return filePaths
+}
+
+def getFiles(wildcards, rootDir=''){
+    def files = []
+    for(def wildcard : wildcards ) { 
+        files.addAll(findFiles(glob: wildcard))
+    }
+    
+    def names = []
+    def prefix = rootDir == '' ? '' : rootDir + '\\'
+    for(def file : files ) { names << prefix + file.name }
+    return names
+}
+
+def cleanDir(dirPath) {
+     def dir = new File(dirPath)
+     if (dir.exists()) dir.deleteDir()
+     if (!dir.exists()) dir.mkdirs()
+}
+
+def makeDir(dirPath) {
+     def dir = new File(dirPath)
+     if (!dir.exists()) dir.mkdirs()
+}
+
+def removeDir(dirPath) {
+     def dir = new File(dirPath)
+     if (dir.exists()) dir.deleteDir()
+}
+def log(message){
+    println message
+} 
+
+class BuildStatus {
+    static String Ok = 'Ok'
+    static String Error = 'Error'
+    static String Warning = 'Warning'
+}
