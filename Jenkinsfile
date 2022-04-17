@@ -11,18 +11,25 @@ node {
          git (url: 'https://github.com/amateus1/devopsbase.git', credentialsID: 'aee06964-d162-4114-b8fb-9d622b7e8389', branch: 'develop')
 
    }
-   stage('Build') {
-      if (isUnix()) {
+//   stage('Build') {
+//      if (isUnix()) {
 //         sh "'/usr/bin/mvn' -Dmaven.test.failure.ignore clean package"
-           sh "mvn -Dmaven.test.failure.ignore clean package"
+//           sh "mvn -Dmaven.test.failure.ignore clean package"
 //         sh "/var/lib/jenkins/workspace/develop-pipeline/mvn -version"
 //         sh "mvn -Dmaven.test.failure.ignore clean package"
-           hygieiaBuildPublishStep buildStatus: 'Success'
+//           hygieiaBuildPublishStep buildStatus: 'Success'
   
-    } else {
-         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
-      }
+//    } else {
+//         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
+//      }
    }
+       stage('Build') {
+            steps {
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+
+
+
    stage('Unit Test') {
       junit '**/target/surefire-reports/TEST-*.xml'
        archive 'target/*.war'
