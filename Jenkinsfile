@@ -38,12 +38,17 @@ node {
 //		sh "echo '**** COMPLETED UNIT TEST ******'"
        archiveArtifacts 'target/*.war'
 	   	sh "echo '**** COMPLETED ARTIFACT ARCHIVE ******'"
+		sh "pwd"
+		ssh "ls"
+		sh "cd target"
+		sh "cd target"
+		sh "ls"
 //         archiveArtifacts 'target/*.jar'
 //      archive 'target/*.jar'
-//      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: '/target', artifactGroup: 'com.example.devops', artifactName: '*.jar', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
-        hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
-        hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'QA'
-        hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'PROD'    
+//      hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/target', artifactGroup: 'com.example.devops', artifactName: '*.jar', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
+        hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
+        hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'QA'
+        hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'PROD'    
 //      	hygieiaCodeQualityPublishStep checkstyleFilePattern: '**/*/checkstyle-result.xml', findbugsFilePattern: '**/*/Findbugs.xml', jacocoFilePattern: '**/*/jacoco.xml', junitFilePattern: '**/*/TEST-.*-test.xml', pmdFilePattern: '**/*/PMD.xml'
 		sh "echo '**** COMPLETED UNIT TEST ******'"
    }
