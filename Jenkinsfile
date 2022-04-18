@@ -5,7 +5,7 @@ pipeline {
 	stages {
 		stage('Prepare') {
 			steps {
-         git (url: 'https://github.com/amateus1/devopsbase.git', credentialsID: 'aee06964-d162-4114-b8fb-9d622b7e8389', branch: 'develop')
+         git 'https://github.com/amateus1/devopsbase.git'
 		}
    }
 //   stage('Build') {
