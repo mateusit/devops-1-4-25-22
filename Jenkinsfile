@@ -67,7 +67,7 @@ pipeline {
   stage('SonarQube Analysis') {
 //    def mvn = tool 'Default Maven';
     tools {
-        jdk "JDK-8" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
+        jdk "JDK-11" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
     }
 	environment {
         scannerHome = tool 'SONAR' // the name you have given the Sonar Scanner (Global Tool Configuration)
