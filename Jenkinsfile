@@ -67,7 +67,6 @@ pipeline {
  
   stage('SonarQube Analysis') {
 //    def mvn = tool 'Default Maven';
-    sh "echo '**** STARTING SONAR TEST ******'"
     tools {
         jdk "jdk11" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
     }
@@ -75,6 +74,7 @@ pipeline {
         scannerHome = tool 'SonarQube Scanner' // the name you have given the Sonar Scanner (Global Tool Configuration)
     }
     steps {
+		sh "echo '**** STARTING SONAR TEST ******'"
         withSonarQubeEnv(installationName: 'SonarQube') {
             sh 'mvn sonar:sonar'
         }	
@@ -93,22 +93,29 @@ pipeline {
 //      }
 //   }
    stage('Deploy-DEV') {
-       sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat.eastus.cloudapp.azure.com:/manager/text/deploy?path=/develop-pipeline&update=true"'
+       steps {
+	   sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat.eastus.cloudapp.azure.com:/manager/text/deploy?path=/develop-pipeline&update=true"'
      	hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
- 	}
+		}
+	}
    stage('Deploy-QA') {
+		steps {
 // 	   sh 'curl -u jenkins:jenkins -T target/**.war "http://coe-tomcatqa3.eastus.cloudapp.azure.com/manager/text/deploy?path=/develop-pipeline&update=true"'
      hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
- 	}
+		}
+	}
  	stage('Deploy-PROD') {
+		steps {
 // 	   sh 'curl -u jenkins:jenkins -T target/**.war "http://mep-tomcat-prod.eastus.cloudapp.azure.com/manager/text/deploy?path=/develop-pipeline&update=true"'
      	hygieiaArtifactPublishStep artifactDirectory: '/develop-pipeline/target', artifactGroup: 'com.example.devops', artifactName: '*war', artifactVersion: '3.0.0'
-    }
+		}
+	}
    stage("Smoke Test-PROD"){
-       sh "curl --retry-delay 10 --retry 5 http://mep-tomcat.eastus.cloudapp.azure.com/develop-pipeline"
+       steps {
+	   sh "curl --retry-delay 10 --retry 5 http://mep-tomcat.eastus.cloudapp.azure.com/develop-pipeline"
  //      sh "curl --retry-delay 10 --retry 5 http://coe-tomcatqa3.eastus.cloudapp.azure.com/develop-pipeline/"
  //      sh "curl --retry-delay 10 --retry 5 http://mep-tomcat-prod.eastus.cloudapp.azure.com/develop-pipeline/"
-       
-   }
+		}
+	}
 }
 }
