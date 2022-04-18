@@ -22,12 +22,12 @@ node {
 //    } else {
 //         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
 //      }
-   }
+// 	}
        stage('Build') {
             steps {
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
-
+		}
 
 
    stage('Unit Test') {
