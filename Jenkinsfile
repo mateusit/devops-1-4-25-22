@@ -25,15 +25,16 @@ node {
 // 	}
        stage('Build') {
 //            steps {
-				sh "java -version" 
-                sh "mvn -Dmaven.test.failure.ignore=true clean package -DskipTests"
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
 //            }
 		}
 
 
    stage('Unit Test') {
+	  sh "java -version" 
       junit '**/target/surefire-reports/TEST-*.xml'
-       archive 'target/*.war'
+//       archive 'target/*.war'
+         archiveArtifacts 'target/*.jar'
 //      archive 'target/*.jar'
 //      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: '/target', artifactGroup: 'com.example.devops', artifactName: '*.jar', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
         hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
