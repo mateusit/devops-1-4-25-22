@@ -35,7 +35,7 @@ node {
 	  sh "echo '**** STARTIN UNIT TEST ******'"
 	  sh "java -version" 
       junit '**/target/surefire-reports/TEST-*.xml'
-		sh "echo '**** COMPLETED UNIT TEST ******'"
+//		sh "echo '**** COMPLETED UNIT TEST ******'"
        archiveArtifacts 'target/*.war'
 //         archiveArtifacts 'target/*.jar'
 //      archive 'target/*.jar'
