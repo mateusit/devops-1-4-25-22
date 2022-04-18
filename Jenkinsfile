@@ -24,9 +24,9 @@ node {
 //      }
 // 	}
        stage('Build') {
-            steps {
+//            steps {
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
+//            }
 		}
 
 
