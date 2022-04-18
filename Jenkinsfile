@@ -37,6 +37,7 @@ node {
       junit '**/target/surefire-reports/TEST-*.xml'
 //		sh "echo '**** COMPLETED UNIT TEST ******'"
        archiveArtifacts 'target/*.war'
+	   	sh "echo '**** COMPLETED ARTIFACT ARCHIVE ******'"
 //         archiveArtifacts 'target/*.jar'
 //      archive 'target/*.jar'
 //      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: '/target', artifactGroup: 'com.example.devops', artifactName: '*.jar', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
@@ -48,7 +49,7 @@ node {
    }
    stage('Integration Test') {
 //     if (isUnix()) {
-        sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore clean verify"
+        sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore clean install"
 //     } else {
         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify/)
 //     }
