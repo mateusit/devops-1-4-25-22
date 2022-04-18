@@ -26,7 +26,7 @@ node {
        stage('Build') {
 //            steps {
               sh "whoami"
-//              sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore=true clean package"
+              sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore=true clean install package"
 //            }
 		}
 
@@ -34,7 +34,7 @@ node {
    stage('Unit Test') {
 	  sh "java -version" 
       junit '**/target/surefire-reports/TEST-*.xml'
-//       archive 'target/*.war'
+//       archiveArtifacts 'target/*.war'
          archiveArtifacts 'target/*.jar'
 //      archive 'target/*.jar'
 //      hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: '/target', artifactGroup: 'com.example.devops', artifactName: '*.jar', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
