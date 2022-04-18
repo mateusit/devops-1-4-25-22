@@ -1,7 +1,7 @@
 node {
    
-   def mvnHome = tool 'MAVEN'
-   env.JAVA_HOME = tool'JDK-11'
+//   def mvnHome = tool 'MAVEN'
+//   env.JAVA_HOME = tool'JDK-11'
 
    stage('Prepare') {
 
@@ -24,9 +24,12 @@ node {
 //      }
 // 	}
        stage('Build') {
-//            steps {
+			tools {
+					jdk "JDK-8" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
+				}
+            steps {
               sh "whoami"
-              sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore=true clean install package"
+              sh 'mvn compile'
 //            }
 		}
 
@@ -65,9 +68,18 @@ node {
   stage('SonarQube Analysis') {
 //    def mvn = tool 'Default Maven';
     sh "echo '**** STARTING SONAR TEST ******'"
-	withSonarQubeEnv() {
-      sh "echo 'coe+best2022' | sudo -S mvn clean install sonar:sonar -Dsonar.projectKey=simple-maven-project-with-tests -Dsonar.host.url=http://mep-sonar.eastus2.cloudapp.azure.com  -Dsonar.login=fe5b9d9f8a95064ec4a4547c850700dd78c1b038" 
-      sh "echo '**** FINISHED SONAR TEST ******'"
+    tools {
+        jdk "jdk11" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
+    }
+	environment {
+        scannerHome = tool 'SonarQube Scanner' // the name you have given the Sonar Scanner (Global Tool Configuration)
+    }
+    steps {
+        withSonarQubeEnv(installationName: 'SonarQube') {
+            sh 'mvn sonar:sonar'
+        }	
+	
+    sh "echo '**** FINISHED SONAR TEST ******'"
 	  }
     }
 
