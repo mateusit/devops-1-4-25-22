@@ -37,7 +37,7 @@ node {
 		sh "echo '**** STARTING JUNIT TEST ******'"
 //      junit '/bitnami/jenkins/home/workspace/coe-pipeline-1/target/surefire-reports/TEST-*.xml'
 		sh "echo '**** COMPLETED JUNIT TEST ******'"
-       archiveArtifacts '/bitnami/jenkins/home/workspace/coe-pipeline-1/target/devops-7.3.0-SNAPSHOT.war'
+       archiveArtifacts 'target/devops-7.3.0-SNAPSHOT.war'
 	   	sh "echo '**** COMPLETED ARTIFACT ARCHIVE ******'"
 		sh "pwd"
 		ssh "ls"
