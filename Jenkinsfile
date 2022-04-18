@@ -60,15 +60,15 @@ node {
 //    def mvn = tool 'Default Maven';
     sh "echo '**** STARTING SONAR TEST ******'"
 	withSonarQubeEnv() {
-      sh "echo 'coe+best2022' | sudo -S mvn clean verify sonar:sonar -Dsonar.projectKey=coe-hygieia -Dsonar.host.url=http://mep-sonar.eastus2.cloudapp.azure.com  -Dsonar.login=fe5b9d9f8a95064ec4a4547c850700dd78c1b038"
+      sh "echo 'coe+best2022' | sudo -S mvn clean verify sonar:sonar -Dsonar.projectKey=simple-maven-project-with-tests -Dsonar.host.url=http://mep-sonar.eastus2.cloudapp.azure.com  -Dsonar.login=fe5b9d9f8a95064ec4a4547c850700dd78c1b038" -X
       sh "echo '**** FINISHED SONAR TEST ******'"
 	  }
     }
 
 //   stage('Sonar') {
 //      if (isUnix()) {
-//           sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=coe-hygieia   -Dsonar.host.url=http://mep-sonar.eastus2.cloudapp.azure.com  -Dsonar.login=ef026f77b563ee37ea01bb630b4dc2701ce4a306"
-// 		    // sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=coe-hygieia   -Dsonar.host.url= http://54.227.225.164:9000 -Dsonar.login= f68d0b7ae24f4963c23d2b65bd7ae17fc0f800e1" -X
+//           sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=simple-maven-project-with-tests   -Dsonar.host.url=http://mep-sonar.eastus2.cloudapp.azure.com  -Dsonar.login=ef026f77b563ee37ea01bb630b4dc2701ce4a306" -X
+// 		    // sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=simple-maven-project-with-tests   -Dsonar.host.url= http://54.227.225.164:9000 -Dsonar.login= f68d0b7ae24f4963c23d2b65bd7ae17fc0f800e1" -X
 //         // hygieiaSonarPublishStep ceQueryIntervalInSeconds: '10', ceQueryMaxAttempts: '30'
 //      } else {
 //         bat(/"${mvnHome}\bin\mvn" sonar:sonar/)
