@@ -26,7 +26,7 @@ node {
        stage('Build') {
 //            steps {
 				sh "java -version" 
-                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                sh "mvn -Dmaven.test.failure.ignore=true clean package -DskipTests"
 //            }
 		}
 
