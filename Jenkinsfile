@@ -25,7 +25,8 @@ node {
 // 	}
        stage('Build') {
 //            steps {
-              sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore=true clean package"
+              sh "whoamai"
+//              sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore=true clean package"
 //            }
 		}
 
