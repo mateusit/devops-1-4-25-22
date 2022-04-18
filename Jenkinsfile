@@ -60,7 +60,7 @@ node {
 //    def mvn = tool 'Default Maven';
     sh "echo '**** STARTING SONAR TEST ******'"
 	withSonarQubeEnv() {
-      sh "echo 'coe+best2022' | sudo -S mvn clean verify sonar:sonar -Dsonar.projectKey=simple-maven-project-with-tests -Dsonar.host.url=http://mep-sonar.eastus2.cloudapp.azure.com  -Dsonar.login=fe5b9d9f8a95064ec4a4547c850700dd78c1b038" 
+      sh "echo 'coe+best2022' | sudo -S mvn clean install sonar:sonar -Dsonar.projectKey=simple-maven-project-with-tests -Dsonar.host.url=http://mep-sonar.eastus2.cloudapp.azure.com  -Dsonar.login=fe5b9d9f8a95064ec4a4547c850700dd78c1b038" 
       sh "echo '**** FINISHED SONAR TEST ******'"
 	  }
     }
