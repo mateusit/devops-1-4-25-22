@@ -51,7 +51,7 @@ node {
 //     if (isUnix()) {
         sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore clean install"
 //     } else {
-        bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify/)
+//        bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify/)
 //     }
    }
 
