@@ -26,7 +26,7 @@ node {
             steps {
               sh "whoami"
               sh 'mvn compile'
-//            }
+            }
 		}
 
 
