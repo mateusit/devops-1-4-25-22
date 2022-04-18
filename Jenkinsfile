@@ -41,7 +41,7 @@ pipeline {
 		   archiveArtifacts 'target/devops-7.3.0-SNAPSHOT.war'
 			sh "echo '**** COMPLETED ARTIFACT ARCHIVE ******'"
 			sh "pwd"
-			ssh "ls"
+			sh "ls"
 			sh "cd target"
 			sh "cd target"
 			sh "ls"
@@ -68,7 +68,7 @@ pipeline {
   stage('SonarQube Analysis') {
 //    def mvn = tool 'Default Maven';
     tools {
-        jdk "jdk11" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
+        jdk "JDK-11" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
     }
 	environment {
         scannerHome = tool 'SonarQube Scanner' // the name you have given the Sonar Scanner (Global Tool Configuration)
