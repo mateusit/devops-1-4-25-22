@@ -57,10 +57,12 @@ node {
 
  
   stage('SonarQube Analysis') {
-    def mvn = tool 'Default Maven';
-    withSonarQubeEnv() {
+//    def mvn = tool 'Default Maven';
+    sh "echo '**** STARTING SONAR TEST ******'"
+	withSonarQubeEnv() {
       sh "echo 'coe+best2022' | sudo -S mvn clean verify sonar:sonar -Dsonar.projectKey=coe-hygieia"
-      }
+      sh "echo '**** FINISHED SONAR TEST ******'"
+	  }
     }
 
 //   stage('Sonar') {
