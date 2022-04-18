@@ -47,18 +47,18 @@ node {
 		sh "echo '**** COMPLETED UNIT TEST ******'"
    }
    stage('Integration Test') {
-     if (isUnix()) {
-        sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean verify"
-     } else {
+//     if (isUnix()) {
+        sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore clean verify"
+//     } else {
         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify/)
-     }
+//     }
    }
 
  
   stage('SonarQube Analysis') {
     def mvn = tool 'Default Maven';
     withSonarQubeEnv() {
-      sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=coe-hygieia"
+      sh "echo 'coe+best2022' | sudo -S mvn clean verify sonar:sonar -Dsonar.projectKey=coe-hygieia"
       }
     }
 
