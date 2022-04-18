@@ -44,7 +44,7 @@ pipeline {
 			sh "cd target"
 			sh "cd target"
 			sh "ls"
-	         archiveArtifacts 'target/*.jar'
+	//         archiveArtifacts 'target/*.jar'
 	//      archive 'target/*.jar'
 		  hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
 			hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
