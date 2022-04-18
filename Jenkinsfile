@@ -26,10 +26,9 @@ pipeline {
 				}
             steps {
               sh "whoami"
-              sh 'mvn compile'
+              sh "echo 'coe+best2022' | sudo -S mvn compile"
             }
 		}
-
 
    stage('Unit Test') {
 		steps {
