@@ -35,7 +35,7 @@ node {
 	  sh "echo '**** STARTIN UNIT TEST ******'"
 	  sh "java -version" 
 		sh "echo '**** STARTING JUNIT TEST ******'"
-      junit '/bitnami/jenkins/home/workspace/coe-pipeline-1/target/surefire-reports/TEST-*.xml'
+//      junit '/bitnami/jenkins/home/workspace/coe-pipeline-1/target/surefire-reports/TEST-*.xml'
 		sh "echo '**** COMPLETED JUNIT TEST ******'"
        archiveArtifacts '/bitnami/jenkins/home/workspace/coe-pipeline-1/target/*.war'
 	   	sh "echo '**** COMPLETED ARTIFACT ARCHIVE ******'"
