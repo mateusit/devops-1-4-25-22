@@ -75,7 +75,7 @@ pipeline {
     steps {
 		sh "echo '**** STARTING SONAR TEST ******'"
         withSonarQubeEnv(installationName: 'SONAR') {
-            sh "echo 'coe+best2022' | sudo -S mvn sonar:sonar"
+            sh "echo 'coe+best2022' | sudo -S mvn sonar:sonar -Dsonar.host.url=http://mep-sonar.eastus2.cloudapp.azure.com "
         }	
 	
     sh "echo '**** FINISHED SONAR TEST ******'"
