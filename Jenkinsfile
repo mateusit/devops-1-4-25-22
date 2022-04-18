@@ -1,4 +1,4 @@
-node {
+pipeline {
    
 //   def mvnHome = tool 'MAVEN'
 //   env.JAVA_HOME = tool'JDK-11'
