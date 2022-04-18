@@ -1,8 +1,8 @@
 pipeline {
-   
+	agent any
 //   def mvnHome = tool 'MAVEN'
 //   env.JAVA_HOME = tool'JDK-11'
-
+	stages {
    stage('Prepare') {
          git (url: 'https://github.com/amateus1/devopsbase.git', credentialsID: 'aee06964-d162-4114-b8fb-9d622b7e8389', branch: 'develop')
 
@@ -106,4 +106,5 @@ pipeline {
  //      sh "curl --retry-delay 10 --retry 5 http://mep-tomcat-prod.eastus.cloudapp.azure.com/develop-pipeline/"
        
    }
+}
 }
