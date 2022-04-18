@@ -32,8 +32,10 @@ node {
 
 
    stage('Unit Test') {
+	  sh "echo '**** STARTIN UNIT TEST ******'"
 	  sh "java -version" 
       junit '**/target/surefire-reports/TEST-*.xml'
+		sh "echo '**** COMPLETED UNIT TEST ******'"
        archiveArtifacts 'target/*.war'
 //         archiveArtifacts 'target/*.jar'
 //      archive 'target/*.jar'
@@ -42,6 +44,7 @@ node {
         hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'QA'
         hygieiaDeployPublishStep applicationName: 'develop-pipeline', artifactDirectory: 'target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'PROD'    
       	hygieiaCodeQualityPublishStep checkstyleFilePattern: '**/*/checkstyle-result.xml', findbugsFilePattern: '**/*/Findbugs.xml', jacocoFilePattern: '**/*/jacoco.xml', junitFilePattern: '**/*/TEST-.*-test.xml', pmdFilePattern: '**/*/PMD.xml'
+		sh "echo '**** COMPLETED UNIT TEST ******'"
    }
    stage('Integration Test') {
      if (isUnix()) {
