@@ -3,9 +3,10 @@ pipeline {
 //   def mvnHome = tool 'MAVEN'
 //   env.JAVA_HOME = tool'JDK-11'
 	stages {
-   stage('Prepare') {
+		stage('Prepare') {
+			steps {
          git (url: 'https://github.com/amateus1/devopsbase.git', credentialsID: 'aee06964-d162-4114-b8fb-9d622b7e8389', branch: 'develop')
-
+		}
    }
 //   stage('Build') {
 //      if (isUnix()) {
@@ -31,35 +32,38 @@ pipeline {
 
 
    stage('Unit Test') {
-	  sh "echo '**** STARTIN UNIT TEST ******'"
-	  sh "java -version" 
-		sh "echo '**** STARTING JUNIT TEST ******'"
-//      junit '/bitnami/jenkins/home/workspace/coe-pipeline-1/target/surefire-reports/TEST-*.xml'
-		sh "echo '**** COMPLETED JUNIT TEST ******'"
-       archiveArtifacts 'target/devops-7.3.0-SNAPSHOT.war'
-	   	sh "echo '**** COMPLETED ARTIFACT ARCHIVE ******'"
-		sh "pwd"
-		ssh "ls"
-		sh "cd target"
-		sh "cd target"
-		sh "ls"
-//         archiveArtifacts 'target/*.jar'
-//      archive 'target/*.jar'
-      hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
-        hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
-        hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'QA'
-        hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'PROD'    
-//      	hygieiaCodeQualityPublishStep checkstyleFilePattern: '**/*/checkstyle-result.xml', findbugsFilePattern: '**/*/Findbugs.xml', jacocoFilePattern: '**/*/jacoco.xml', junitFilePattern: '**/*/TEST-.*-test.xml', pmdFilePattern: '**/*/PMD.xml'
-		sh "echo '**** COMPLETED UNIT TEST ******'"
-   }
+		steps {
+		sh "echo '**** STARTIN UNIT TEST ******'"
+		  sh "java -version" 
+			sh "echo '**** STARTING JUNIT TEST ******'"
+	//      junit '/bitnami/jenkins/home/workspace/coe-pipeline-1/target/surefire-reports/TEST-*.xml'
+			sh "echo '**** COMPLETED JUNIT TEST ******'"
+		   archiveArtifacts 'target/devops-7.3.0-SNAPSHOT.war'
+			sh "echo '**** COMPLETED ARTIFACT ARCHIVE ******'"
+			sh "pwd"
+			ssh "ls"
+			sh "cd target"
+			sh "cd target"
+			sh "ls"
+	//         archiveArtifacts 'target/*.jar'
+	//      archive 'target/*.jar'
+		  hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
+			hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'DEV'   
+			hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'QA'
+			hygieiaDeployPublishStep applicationName: 'simple-maven-project-with-tests', artifactDirectory: '/bitnami/jenkins/home/workspace/coe-pipeline-1/target', artifactGroup: 'com.example', artifactName: '*.war', artifactVersion: '', buildStatus: 'Success', environmentName: 'PROD'    
+	//      	hygieiaCodeQualityPublishStep checkstyleFilePattern: '**/*/checkstyle-result.xml', findbugsFilePattern: '**/*/Findbugs.xml', jacocoFilePattern: '**/*/jacoco.xml', junitFilePattern: '**/*/TEST-.*-test.xml', pmdFilePattern: '**/*/PMD.xml'
+			sh "echo '**** COMPLETED UNIT TEST ******'"
+		}
+		}
    stage('Integration Test') {
+		steps {
 //     if (isUnix()) {
         sh "echo 'coe+best2022' | sudo -S mvn -Dmaven.test.failure.ignore clean install"
 //     } else {
 //        bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify/)
 //     }
-   }
-
+		}
+	}
  
   stage('SonarQube Analysis') {
 //    def mvn = tool 'Default Maven';
