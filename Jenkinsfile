@@ -70,11 +70,11 @@ pipeline {
         jdk "JDK-11" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
     }
 	environment {
-        scannerHome = tool 'SonarQube Scanner' // the name you have given the Sonar Scanner (Global Tool Configuration)
+        scannerHome = tool 'SONAR' // the name you have given the Sonar Scanner (Global Tool Configuration)
     }
     steps {
 		sh "echo '**** STARTING SONAR TEST ******'"
-        withSonarQubeEnv(installationName: 'SonarQube') {
+        withSonarQubeEnv(installationName: 'SONAR') {
             sh 'mvn sonar:sonar'
         }	
 	
