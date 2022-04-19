@@ -25,8 +25,10 @@ pipeline {
 					jdk "JDK-11" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
 				}
             steps {
+			sh "echo '**** STARTIN BUILD TEST ******'"
               sh "whoami"
-              sh "echo 'coe+best2022' | sudo -S mvn compile"
+			  sh "java -version"               
+			  sh "echo 'coe+best2022' | sudo -S mvn clean compile"
             }
 		}
 
