@@ -22,7 +22,7 @@ pipeline {
 // 	}
        stage('Build') {
 			tools {
-					jdk "JDK-8" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
+					jdk "JDK-11" // the name you have given the JDK installation using the JDK manager (Global Tool Configuration)
 				}
             steps {
               sh "whoami"
