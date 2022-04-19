@@ -113,6 +113,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>
 				<configuration>
+					<fork>true</fork>
+					<executable>/usr/lib/jvm/jdk-11/bin/javac</executable>
 					<source>11</source>
 					<target>11</target>
 				</configuration>
