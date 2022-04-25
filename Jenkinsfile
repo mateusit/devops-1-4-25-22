@@ -31,7 +31,7 @@ node {
 
     stage('Integration Test') {
       if (isUnix()) {
-         sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean verify -DskipTests"
+         sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean verify"
       } else {
          bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify/)
       }
