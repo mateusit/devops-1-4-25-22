@@ -40,7 +40,7 @@ node {
      stage('Sonar') {
        if (isUnix()) {
 		  sh "echo '**** STARTING SONARQUBE ANALYSIS ******'"	
-		  sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=com.example.devops:devops2 -Dsonar.host.url=http://mep-hygieia-docker-2.eastus2.cloudapp.azure.com:9000  -Dsonar.login=cd8432698d6588536b374524981c92076bd4b30e"
+		  sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=com.example.devops:devops-2 -Dsonar.host.url=http://mep-hygieia-docker-2.eastus2.cloudapp.azure.com:9000  -Dsonar.login=cd8432698d6588536b374524981c92076bd4b30e"
 		  sh "echo '**** SONARQUBE ANALYSIS COMPLETE ******'"	
        } else {
           bat(/"${mvnHome}\bin\mvn" sonar:sonar/)
