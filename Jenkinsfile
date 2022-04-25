@@ -33,7 +33,7 @@ node {
       if (isUnix()) {
          sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean verify -DskipTests"
       } else {
-         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify -DskipTests/)
+         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean verify/)
       }
     }
 
