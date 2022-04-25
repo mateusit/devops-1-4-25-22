@@ -40,7 +40,7 @@ node {
      stage('Sonar') {
        if (isUnix()) {
 		  sh "echo '**** STARTING SONARQUBE ANALYSIS ******'"	
-		  sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=coe-hygieia -Dsonar.host.url=http://mep-hygieia-docker-2.eastus2.cloudapp.azure.com:9000  -Dsonar.login=e19a79d7b069f1ac31c98eee817aced69a97a342"
+		  sh "'${mvnHome}/bin/mvn' sonar:sonar -Dsonar.projectKey=com.example.devops:devops2 -Dsonar.host.url=http://mep-hygieia-docker-2.eastus2.cloudapp.azure.com:9000  -Dsonar.login=cd8432698d6588536b374524981c92076bd4b30e"
 		  sh "echo '**** SONARQUBE ANALYSIS COMPLETE ******'"	
        } else {
           bat(/"${mvnHome}\bin\mvn" sonar:sonar/)
@@ -54,15 +54,15 @@ node {
 			sh "echo '**** STARTING ARTIFACT PUBLISH ******'"	
 			hygieiaArtifactPublishStep artifactDirectory: 'target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: ''			
 			sh "echo '**** STARTING PUBLISH STEP******'"	
-			hygieiaTestPublishStep buildStatus: 'Success', testApplicationName: 'devops', testEnvironmentName: 'DEV', testFileNamePattern: 'TEST-*.xml', testResultsDirectory: '/target/surefire-reports/', testType: 'Unit'
+			hygieiaTestPublishStep buildStatus: 'Success', testApplicationName: 'devops-2', testEnvironmentName: 'DEV', testFileNamePattern: 'TEST-*.xml', testResultsDirectory: '/target/surefire-reports/', testType: 'Unit'
 			sh "echo '**** STARTING CODE QUALITY PUBLISH STEP******'"	
 			hygieiaCodeQualityPublishStep checkstyleFilePattern: '**/*/checkstyle-result.xml', findbugsFilePattern: '**/*/Findbugs.xml', jacocoFilePattern: '**/*/jacoco.xml', junitFilePattern: '**/*/TEST-.*-test.xml', pmdFilePattern: '**/*/PMD.xml'
 			sh "echo '**** STARTING SONAR PUBLISH STEP******'"
 			hygieiaSonarPublishStep ceQueryIntervalInSeconds: '10', ceQueryMaxAttempts: '30'
 			sh "echo '**** STARTING DEPLOY PUBLISH STEP******'"
-			hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: 'target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
-			hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: 'target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'TEST'
-			hygieiaDeployPublishStep applicationName: 'devops', artifactDirectory: 'target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'PROD'
+			hygieiaDeployPublishStep applicationName: 'devops-2', artifactDirectory: 'target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'DEV'
+			hygieiaDeployPublishStep applicationName: 'devops-2', artifactDirectory: 'target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'TEST'
+			hygieiaDeployPublishStep applicationName: 'devops-2', artifactDirectory: 'target', artifactGroup: 'com.example.devops', artifactName: '*.war', artifactVersion: '', buildStatus: 'InProgress', environmentName: 'PROD'
 			sh "echo '**** PUBLISH TO HYGIEIA COMPLETE ******'"
        } else {
 			sh "echo '**** STARTING SOMETHING WENT WRONG ******'"	
